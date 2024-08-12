@@ -1,5 +1,5 @@
 # 💫 About Me:
-🔭 I’m currently working a Productivity app using Rust<br>🤝 I’m looking for help with Rust GUIs<br>🌱 I’m currently learning Rust<br>💬 Ask me about Python<br>⚡ F1, Cricket and watches are my jam
+🔭 I’m currently working on a Productivity app using Rust<br>🤝 I’m looking for help with Rust GUIs<br>🌱 I’m currently learning Rust<br>💬 Ask me about Python<br>⚡ F1, Cricket and watches are my jam
 
 
 ## 🌐 Socials:
