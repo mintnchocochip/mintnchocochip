@@ -15,7 +15,7 @@
 
 - 💬 Ask me about **Python, C, C++**
 
-- 📫 How to reach me **shawfighter@gmail.com**
+- 📫 How to reach me **mintnchocochip@gmail.com**
 
 - ⚡ Fun fact **I love cars**
 
