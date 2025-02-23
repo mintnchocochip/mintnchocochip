@@ -9,7 +9,7 @@
 
 - 🔭 I’m currently working on **Tusker**
 
-- 🌱 I’m currently learning **Flutter**
+- 🌱 I’m currently learning **Rust**
 
 - 🤝 I’m looking for help with **Rust GUI, Open Source Contribution**
 
