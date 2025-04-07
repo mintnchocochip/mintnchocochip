@@ -7,7 +7,7 @@
 
 <p align="left"> <a href="https://twitter.com/thrugoshamilton" target="blank"><img src="https://img.shields.io/twitter/follow/thrugoshamilton?logo=twitter&style=for-the-badge" alt="thrugoshamilton" /></a> </p>
 
-- 🔭 I’m currently working on **Tusker**
+- 🔭 I’m currently working on **Cybersecurity Tool**
 
 - 🌱 I’m currently learning **Rust**
 
@@ -22,7 +22,7 @@
 <h3 align="left">Connect with me:</h3>
 <p align="left">
 <a href="https://twitter.com/thrugoshamilton" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="thrugoshamilton" height="30" width="40" /></a>
-<a href="https://linkedin.com/in/mint47" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="mint47" height="30" width="40" /></a>
+<a href="https://linkedin.com/in/mani44" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="mint47" height="30" width="40" /></a>
 <a href="https://www.hackerrank.com/shawfighter" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/hackerrank.svg" alt="shawfighter" height="30" width="40" /></a>
 <a href="https://www.leetcode.com/mintnchocochip" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="mintnchocochip" height="30" width="40" /></a>
 </p>
