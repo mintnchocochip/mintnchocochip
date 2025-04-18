@@ -1,12 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="985" height="530" font-family="ConsolasFallback,Consolas,monospace" font-size="16">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="985" height="530"
+     font-family="ConsolasFallback,Consolas,monospace"
+     font-size="16">
   <style>
     @font-face { src: local('Consolas'), local('Consolas Bold'); font-family: 'ConsolasFallback'; }
     .key      { fill: #ffa657; }
     .value    { fill: #a5d6ff; }
     .addColor { fill: #3fb950; }
     .delColor { fill: #f85149; }
+    .saber    { fill: #f85149; }
     .cc       { fill: #616e7f; }
+    .mint     { fill: #ffd700; }
+    .stat     { fill: #3eb489; }
     text, tspan { white-space: pre; }
   </style>
   <!-- background -->
@@ -14,46 +20,46 @@
 
   <!-- Darth Vader ASCII Art (straightened) -->
   <text id="vader_art" font-family="ConsolasFallback,Consolas,monospace" font-size="16" fill="#c9d1d9">
-    <tspan x="15" y="60">                       .-.</tspan>
-    <tspan x="15" y="80">                      |_:_|</tspan>
-    <tspan x="15" y="100">                     /(_Y_)\</tspan>
-    <tspan x="15" y="120">.                   ( \/M\/ )</tspan>
-    <tspan x="15" y="140"> '.               _.'-/'-'\-'._</tspan>
-    <tspan x="15" y="160">   ':           _/.--'[[[[]'--.\_</tspan>
-    <tspan x="15" y="180">     ':        /_'  : |::"| :  '.\</tspan>
-    <tspan x="15" y="200">       ':     //   ./ |oUU| \.'  :\</tspan>
-    <tspan x="15" y="220">         ':  _:'..' \_|___|_/ :   :|</tspan>
-    <tspan x="15" y="240">           ':.  .'  |_[___]_|  :.':\</tspan>
-    <tspan x="15" y="260">            [::\ |  :  | |  :   ; : \</tspan>
-    <tspan x="15" y="280">             '-'   \/'.| |.' \  .;.' |</tspan>
-    <tspan x="15" y="300">             |\_    \  '-'   :       |</tspan>
-    <tspan x="15" y="320">             |  \    \ .:    :   |   |</tspan>
-    <tspan x="15" y="340">             |   \    | '.   :    \  |</tspan>
-    <tspan x="15" y="360">             /       \   :. .;       |</tspan>
-    <tspan x="15" y="380">            /     |   |  :__/     :  \\</tspan>
-    <tspan x="15" y="400">           |  |   |    \:   | \   |   ||</tspan>
-    <tspan x="15" y="420">          /    \  : :  |:   /  |__|   /|</tspan>
-    <tspan x="15" y="440">      mnt |     : : :_/_|  /'._\  '--|_\</tspan>
-    <tspan x="15" y="460">          /___.-/_|-'   \  \</tspan>
-    <tspan x="15" y="480">                         '-'</tspan>
+    <tspan x="15"  y="60">                       .-.</tspan>
+    <tspan x="15"  y="80">                      |_:_|</tspan>
+    <tspan x="15"  y="100">                     /(_Y_)\</tspan>
+    <tspan x="15"  y="120"><tspan class="saber">.</tspan>                   ( \/M\/ )</tspan>
+    <tspan x="15"  y="140"><tspan class="saber"> '.</tspan>               _.'-/'-'\-'._</tspan>
+    <tspan x="15"  y="160"><tspan class="saber">   ':</tspan>           _/.--'[[[[]'--.\_</tspan>
+    <tspan x="15"  y="180"><tspan class="saber">     ':</tspan>        /_'  : |::"| :  '.\</tspan>
+    <tspan x="15"  y="200"><tspan class="saber">       ':</tspan>     //   ./ |oUU| \.'  :\</tspan>
+    <tspan x="15"  y="220"><tspan class="saber">         ':</tspan>  _:'..' \_|___|_/ :   :|</tspan>
+    <tspan x="15"  y="240"><tspan class="saber">           '</tspan>:.  .'  |_[___]_|  :.':\</tspan>
+    <tspan x="15"  y="260">            [::\ |  :  | |  :   ; : \</tspan>
+    <tspan x="15"  y="280">             '-'   \/'.| |.' \  .;.' |</tspan>
+    <tspan x="15"  y="300">             |\_    \  '-'   :       |</tspan>
+    <tspan x="15"  y="320">             |  \    \ .:    :   |   |</tspan>
+    <tspan x="15"  y="340">             |   \    | '.   :    \  |</tspan>
+    <tspan x="15"  y="360">             /       \   :. .;       |</tspan>
+    <tspan x="15"  y="380">            /     |   |  :__/     :  \\</tspan>
+    <tspan x="15"  y="400">           |  |   |    \:   | \   |   ||</tspan>
+    <tspan x="15"  y="420">          /    \  : :  |:   /  |__|   /|</tspan>
+    <tspan x="15"  y="440">      mnt |     : : :_/_|  /'._\  '--|_\</tspan>
+    <tspan x="15"  y="460">          /___.-/_|-'   \  \</tspan>
+    <tspan x="15"  y="480">                         '-'</tspan>
   </text>
 
   <!-- Stats block (more padding from art) -->
   <text font-family="ConsolasFallback,Consolas,monospace" font-size="16" fill="#c9d1d9">
     <!-- Base X moved to 450 for extra spacing -->
-    <tspan x="450" y="60">mintnchocochip | –÷+—————————————</tspan>
+    <tspan x="450" y="60">mintnchocochip | –÷+<tspan class="mint">—————————————</tspan></tspan>
     <tspan x="450" y="80" class="cc">. </tspan><tspan class="key">OS</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Windows 11, Android 15, Kali Linux</tspan>
     <tspan x="450" y="100" class="cc">. </tspan><tspan class="key">Uptime</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">20 years</tspan>
     <tspan x="450" y="120" class="cc">. </tspan><tspan class="key">IDE</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Zed, VSCode</tspan>
     <tspan x="450" y="140" class="cc">. </tspan><tspan class="key">Tools</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Binary Ninja, IDA, WireShark</tspan>
     <tspan x="450" y="160" class="cc">. </tspan><tspan class="key">Languages.Programming</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">Python, C++, C, Rust</tspan>
-    <tspan x="450" y="180" class="cc">. </tspan><tspan class="key">Languages.Real</tspan>:<tspan class="cc"> ...... </tspan><tspan class="value">English, Tamil</tspan>
+    <tspan x="450" y="180" class="cc">. </tspan><tspan class="key">Languages.Real</tspan>:<tspan class="cc"> ...... </tspan><tspan class="value">English, Tamizh</tspan>
     <tspan x="450" y="200" class="cc">. </tspan><tspan class="key">Hobbies.Software</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">Motorsports, Cricket</tspan>
     <tspan x="450" y="220" class="cc">. </tspan><tspan class="key">Hobbies.Hardware</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">IoT, HackTools</tspan>
-    <tspan x="450" y="270">- GitHub Stats ——————————</tspan>
-    <tspan x="450" y="290" class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="repo_data">28</tspan> {<tspan class="key">Contributed</tspan>: <tspan class="value" id="contrib_data">31</tspan>} | <tspan class="key">Stars</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="star_data">2</tspan>
-    <tspan x="450" y="310" class="cc">. </tspan><tspan class="key">Commits</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="commit_data">190</tspan> | <tspan class="key">Followers</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="follower_data">3</tspan>
-    <tspan x="450" y="330" class="cc">. </tspan><tspan class="key">Lines of Code</tspan>:<tspan class="cc"> . </tspan><tspan class="addColor" id="loc_add">1,100,105</tspan><tspan class="addColor">++</tspan>, <tspan class="delColor" id="loc_del">635,996</tspan><tspan class="delColor">--</tspan>
+    <tspan x="450" y="270">Github Stats | –÷+<tspan class="stat">—————————————</tspan></tspan>
+    <tspan x="450" y="290" class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="repo_data">95</tspan> {<tspan class="key">Contributed</tspan>: <tspan class="value" id="contrib_data">133</tspan>} | <tspan class="key">Stars</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="star_data">342</tspan>
+    <tspan x="450" y="310" class="cc">. </tspan><tspan class="key">Commits</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="commit_data">2,116</tspan> | <tspan class="key">Followers</tspan>:<tspan class="cc"> .. </tspan><tspan class="value" id="follower_data">196</tspan>
+    <tspan x="450" y="330" class="cc">. </tspan><tspan class="key">Lines of Code</tspan>:<tspan class="cc"> . </tspan><tspan class="addColor" id="loc_add">523,178</tspan><tspan class="addColor">++</tspan>, <tspan class="delColor" id="loc_del">76,902</tspan><tspan class="delColor">--</tspan>
     <!-- Future details template -->
     <!--
       <tspan x="450" y="350" class="cc">. </tspan><tspan class="key">Custom</tspan>:<tspan class="cc"> ... </tspan><tspan class="value" id="custom_data">Your Data</tspan>
