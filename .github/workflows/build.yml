@@ -12,8 +12,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 1
-        persist-credentials: false  # Prevents checkout from overwriting auth
+        fetch-depth: 1      # keep at least one commit
+        # persist-credentials stays true by default, so push auth works
   
     - name: Setup Python 3.8
       uses: actions/setup-python@v2
