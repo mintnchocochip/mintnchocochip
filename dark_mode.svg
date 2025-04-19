@@ -46,7 +46,7 @@
     <!-- Base X moved to 450 for extra spacing -->
     <tspan x="450" y="60">mintnchocochip | –÷+<tspan class="mint">—————————————</tspan></tspan>
     <tspan x="450" y="80" class="cc">. </tspan><tspan class="key">OS</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Windows 11, Android 15, Kali Linux</tspan>
-    <tspan x="390" y="100" class="cc">. </tspan><tspan class="key">Uptime</tspan>:<tspan class="cc" id="age_data_dots"> ...................... </tspan><tspan class="value" id="age_data">20 years, 1 month, 15 days</tspan>
+    <tspan x="450" y="100" class="cc">. </tspan><tspan class="key">Uptime</tspan>:<tspan class="cc" id="age_data_dots"> ...................... </tspan><tspan class="value" id="age_data">20 years, 1 month, 15 days</tspan>
     <tspan x="450" y="120" class="cc">. </tspan><tspan class="key">IDE</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Zed, VSCode, RustRover</tspan>
     <tspan x="450" y="140" class="cc">. </tspan><tspan class="key">Tools</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Binary Ninja, IDA, WireShark, NMAP</tspan>
     <tspan x="450" y="160" class="cc">. </tspan><tspan class="key">Languages.Programming</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">Python, C++, C, Rust</tspan>
