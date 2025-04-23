@@ -47,8 +47,8 @@
     <tspan x="450" y="60">mintnchocochip | –÷+<tspan class="mint">—————————————</tspan></tspan>
     <tspan x="450" y="80" class="cc">. </tspan><tspan class="key">OS</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Windows 11, Android 15, Kali Linux</tspan>
     <tspan x="450" y="100" class="cc">. </tspan><tspan class="key">Uptime</tspan>:<tspan class="cc" id="age_data_dots"> ...................... </tspan><tspan class="value" id="age_data">20 years, 1 month, 15 days</tspan>
-    <tspan x="450" y="120" class="cc">. </tspan><tspan class="key">IDE&Terminals</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Zed, Ghostty, VSCode, RustRover</tspan>
-    <tspan x="450" y="140" class="cc">. </tspan><tspan class="key">Tools</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Binary Ninja, IDA, WireShark, NMAP</tspan>
+    <tspan x="450" y="120" class="cc">. </tspan><tspan class="key">Dev Tools</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Zed, Ghostty, VSCode, RustRover</tspan>
+    <tspan x="450" y="140" class="cc">. </tspan><tspan class="key">CyberSec Tools</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">Binary Ninja, IDA, WireShark, NMAP</tspan>
     <tspan x="450" y="160" class="cc">. </tspan><tspan class="key">Languages.Programming</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">Python, C++, C, Rust</tspan>
     <tspan x="450" y="180" class="cc">. </tspan><tspan class="key">Languages.Real</tspan>:<tspan class="cc"> ...... </tspan><tspan class="value">English, Tamizh</tspan>
     <tspan x="450" y="200" class="cc">. </tspan><tspan class="key">Hobbies.Software</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">Motorsports, Cricket</tspan>
