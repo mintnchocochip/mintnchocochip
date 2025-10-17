@@ -2,7 +2,17 @@ import datetime
 from dateutil import relativedelta
 import requests
 import os
-from lxml import etree
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
+try:
+    from lxml import etree
+    _LXML = True
+except Exception:
+    # Fall back to the stdlib ElementTree if lxml is not installed.
+    # This makes the script more resilient in CI environments where
+    # binary wheels may not be available.
+    import xml.etree.ElementTree as etree
+    _LXML = False
 import time
 import hashlib
 
@@ -13,6 +23,31 @@ import hashlib
 HEADERS = {'authorization': 'token '+ os.environ['ACCESS_TOKEN']}
 USER_NAME = os.environ['USER_NAME'] # 'Andrew6rant'
 QUERY_COUNT = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
+
+
+def get_session(retries: int = 5, backoff_factor: float = 0.5, status_forcelist=(500, 502, 503, 504)):
+    """
+    Return a requests.Session configured with retry/backoff for idempotent requests.
+    This helps mitigate transient 5xx/502 errors from the GitHub API by retrying.
+    """
+    session = requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    # urllib3 changed the whitelist parameter name in different versions; set attribute defensively
+    if hasattr(retry, 'allowed_methods'):
+        retry.allowed_methods = frozenset(['POST', 'GET'])
+    elif hasattr(retry, 'method_whitelist'):
+        retry.method_whitelist = frozenset(['POST', 'GET'])
+
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('https://', adapter)
+    session.mount('http://', adapter)
+    return session
 
 
 def daily_readme(birthday):
@@ -44,10 +79,26 @@ def simple_request(func_name, query, variables):
     """
     Returns a request, or raises an Exception if the response does not succeed.
     """
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables':variables}, headers=HEADERS)
+    session = get_session()
+    try:
+        request = session.post('https://api.github.com/graphql', json={'query': query, 'variables': variables}, headers=HEADERS, timeout=15)
+    except requests.RequestException as exc:
+        # Network or other request-level error (including retries exhausted)
+        raise RuntimeError(f"{func_name} failed to make request: {exc}")
+
     if request.status_code == 200:
         return request
-    raise Exception(func_name, ' has failed with a', request.status_code, request.text, QUERY_COUNT)
+
+    # Make error messages human-readable for CI logs
+    if request.status_code == 401:
+        raise RuntimeError(f"{func_name} failed: 401 Unauthorized. Check ACCESS_TOKEN secret and its permissions. Response: {request.text}")
+    if request.status_code == 403:
+        raise RuntimeError(f"{func_name} failed: 403 Forbidden. You may have hit an API rate limit or lack permissions. Response: {request.text}")
+    if 500 <= request.status_code < 600:
+        # Server-side error after any retries — surface a clear message for CI logs
+        raise RuntimeError(f"{func_name} failed: server error {request.status_code}. Response: {request.text}. This may be transient (502/5xx). Retries attempted.")
+
+    raise RuntimeError(f"{func_name} has failed with status {request.status_code}: {request.text}. Query counts: {QUERY_COUNT}")
 
 
 def graph_commits(start_date, end_date):
@@ -144,15 +195,52 @@ def recursive_loc(owner, repo_name, data, cache_comment, addition_total=0, delet
         }
     }'''
     variables = {'repo_name': repo_name, 'owner': owner, 'cursor': cursor}
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables':variables}, headers=HEADERS) # I cannot use simple_request(), because I want to save the file before raising Exception
-    if request.status_code == 200:
-        if request.json()['data']['repository']['defaultBranchRef'] != None: # Only count commits if repo isn't empty
-            return loc_counter_one_repo(owner, repo_name, data, cache_comment, request.json()['data']['repository']['defaultBranchRef']['target']['history'], addition_total, deletion_total, my_commits)
-        else: return 0
-    force_close_file(data, cache_comment) # saves what is currently in the file before this program crashes
-    if request.status_code == 403:
-        raise Exception('Too many requests in a short amount of time!\nYou\'ve hit the non-documented anti-abuse limit!')
-    raise Exception('recursive_loc() has failed with a', request.status_code, request.text, QUERY_COUNT)
+    # Use the same retrying session and add a small manual retry loop for extra resilience
+    session = get_session()
+    max_attempts = 4
+    backoff_factor = 0.5
+    last_exception = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            request = session.post('https://api.github.com/graphql', json={'query': query, 'variables': variables}, headers=HEADERS, timeout=15)
+        except requests.RequestException as exc:
+            # Network-level failure (connection, DNS, etc.)
+            last_exception = exc
+            # Save partial cache before surfacing the error if final attempt
+            if attempt == max_attempts:
+                force_close_file(data, cache_comment)
+                raise RuntimeError(f"recursive_loc failed to make request after {attempt} attempts: {exc}")
+            sleep_time = backoff_factor * (2 ** (attempt - 1))
+            time.sleep(sleep_time)
+            continue
+
+        # If we get a successful response, process and return
+        if request.status_code == 200:
+            if request.json()['data']['repository']['defaultBranchRef'] != None: # Only count commits if repo isn't empty
+                return loc_counter_one_repo(owner, repo_name, data, cache_comment, request.json()['data']['repository']['defaultBranchRef']['target']['history'], addition_total, deletion_total, my_commits)
+            else:
+                return 0
+
+        # For client/server errors, decide whether to retry or abort
+        if 500 <= request.status_code < 600:
+            # Server-side error — may be transient. Retry a few times, then abort.
+            last_exception = RuntimeError(f"recursive_loc() server error {request.status_code}: {request.text}")
+            if attempt == max_attempts:
+                # Save whatever is currently written to cache before raising
+                force_close_file(data, cache_comment)
+                raise RuntimeError(f"recursive_loc() server error {request.status_code} after {attempt} attempts: {request.text}. This may be transient (502/5xx).")
+            sleep_time = backoff_factor * (2 ** (attempt - 1))
+            time.sleep(sleep_time)
+            continue
+
+        # Handle common non-retryable responses immediately
+        if request.status_code == 403:
+            force_close_file(data, cache_comment)
+            raise RuntimeError('Too many requests in a short amount of time!\nYou\'ve hit the non-documented anti-abuse limit!')
+
+        # Any other non-200 response is unexpected — persist cache and raise
+        force_close_file(data, cache_comment)
+        raise RuntimeError(f"recursive_loc() has failed with status {request.status_code}: {request.text}. Query counts: {QUERY_COUNT}")
 
 
 def loc_counter_one_repo(owner, repo_name, data, cache_comment, history, addition_total, deletion_total, my_commits):
@@ -251,9 +339,12 @@ def cache_builder(edges, comment_size, force_cache, loc_add=0, loc_del=0):
                     data[index] = repo_hash + ' ' + str(edges[index]['node']['defaultBranchRef']['target']['history']['totalCount']) + ' ' + str(loc[2]) + ' ' + str(loc[0]) + ' ' + str(loc[1]) + '\n'
             except TypeError: # If the repo is empty
                 data[index] = repo_hash + ' 0 0 0 0\n'
-    with open(filename, 'w') as f:
+    # Write atomically to avoid leaving a partially-written cache file on crash
+    tmp_name = filename + '.tmp'
+    with open(tmp_name, 'w') as f:
         f.writelines(cache_comment)
         f.writelines(data)
+    os.replace(tmp_name, filename)
     for line in data:
         loc = line.split()
         loc_add += int(loc[3])
@@ -270,10 +361,12 @@ def flush_cache(edges, filename, comment_size):
         data = []
         if comment_size > 0:
             data = f.readlines()[:comment_size] # only save the comment
-    with open(filename, 'w') as f:
+    tmp_name = filename + '.tmp'
+    with open(tmp_name, 'w') as f:
         f.writelines(data)
         for node in edges:
             f.write(hashlib.sha256(node['node']['nameWithOwner'].encode('utf-8')).hexdigest() + ' 0 0 0 0\n')
+    os.replace(tmp_name, filename)
 
 
 def add_archive():
@@ -301,10 +394,23 @@ def force_close_file(data, cache_comment):
     This is needed because if this function is called, the program would've crashed before the file is properly saved and closed
     """
     filename = 'cache/'+hashlib.sha256(USER_NAME.encode('utf-8')).hexdigest()+'.txt'
-    with open(filename, 'w') as f:
-        f.writelines(cache_comment)
-        f.writelines(data)
-    print('There was an error while writing to the cache file. The file,', filename, 'has had the partial data saved and closed.')
+    # Use atomic replace to ensure we never leave a half-written cache file.
+    tmp_name = filename + '.tmp'
+    try:
+        with open(tmp_name, 'w') as f:
+            f.writelines(cache_comment)
+            f.writelines(data)
+        os.replace(tmp_name, filename)
+        print('There was an error while writing to the cache file. The file,', filename, 'has had the partial data saved and closed.')
+    except Exception as exc:
+        # If atomic write fails, fall back to best-effort write and notify
+        try:
+            with open(filename, 'w') as f:
+                f.writelines(cache_comment)
+                f.writelines(data)
+        except Exception:
+            print('Failed to save cache file to', filename, 'and temporary file', tmp_name)
+        print('Error while attempting to force-close cache file:', exc)
 
 
 def stars_counter(data):
@@ -352,11 +458,21 @@ def justify_format(root, element_id, new_text, length=0):
 
 def find_and_replace(root, element_id, new_text):
     """
-    Finds the element in the SVG file and replaces its text with a new value
+    Finds the element in the SVG file and replaces its text with a new value.
+    Use a parser-agnostic search since the XPath support between lxml and
+    the stdlib ElementTree differs across implementations.
     """
-    element = root.find(f".//*[@id='{element_id}']")
-    if element is not None:
-        element.text = new_text
+    # root may be an ElementTree or an Element depending on the parser
+    if hasattr(root, 'getroot'):
+        el_root = root.getroot()
+    else:
+        el_root = root
+
+    for elem in el_root.iter():
+        # Check the 'id' attribute in a parser-agnostic way
+        if elem.get('id') == element_id:
+            elem.text = new_text
+            return
 
 
 def commit_counter(comment_size):
